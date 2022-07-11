@@ -22,23 +22,23 @@ mv /etc/keepalived/keepalived.conf /etc/keepalived/keepalived.conf-orige
 
 echo " ############### criando arquivo com as configurações do keepalivd ############### "
 echo "
-	## CONFIG DO KEEPALIVD
-	! Configuration File for keepalived
+## CONFIG DO KEEPALIVD
+! Configuration File for keepalived
 
-	vrrp_instance VIP_181.10 {
-		state BACKUP
-		interface enp0s3
-		virtual_router_id 51
-		priority 100
-		advert_int 1
-		authentication {
-			auth_type PASS
-			auth_pass 123456
-		}
-		virtual_ipaddress {
-			192.168.181.10/24
-		}
+vrrp_instance VIP_181.10 {
+	state BACKUP
+	interface enp0s3
+	virtual_router_id 51
+	priority 100
+	advert_int 1
+	authentication {
+		auth_type PASS
+		auth_pass 123456
 	}
+	virtual_ipaddress {
+		192.168.181.10/24
+	}
+}
 " > /etc/keepalived/keepalived.conf
 
 echo " ############### Ativando serviço do keepalived ############### "
@@ -73,12 +73,13 @@ sleep 3s
 
 echo " ############### criando scripta de inicialização ############### "
 echo "
-	#!/bin/bash
-	##Script-Inicialização
-	## Remove os contaniser docker cAdvicor e recra eles
-	docker rm -f cadvisor
-	## Ativa Container cAdvicer
-	docker run --volume=/:/rootfs:ro --volume=/var/run:/var/run:ro --volume=/sys:/sys:ro --volume=/var/lib/docker/:/var/lib/docker:ro --volume=/dev/disk/:/dev/disk:ro --publish=8080:8080 --detach=true --name=cadvisor --privileged gcr.io/google-containers/cadvisor:latest
+#!/bin/bash
+##Script-Inicialização
+## Remove os contaniser docker cAdvicor e recra eles
+docker rm -f cadvisor
+## Ativa Container cAdvicer
+docker run --volume=/:/rootfs:ro --volume=/var/run:/var/run:ro --volume=/sys:/sys:ro --volume=/var/lib/docker/:/var/lib/docker:ro --volume=/dev/disk/:/dev/disk:ro --publish=8080:8080 --detach=true --name=cadvisor --privileged gcr.io/google-containers/cadvisor:latest
+
 " > /Scripts/inicializa.sh
 
 echo " ############### criando scripta de inicialização concluido ############### "
