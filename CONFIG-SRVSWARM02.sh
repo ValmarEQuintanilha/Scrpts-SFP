@@ -110,18 +110,21 @@ WantedBy=default.target
 
 chmod +x /etc/systemd/system/inicializa.service
 
-echo " ############### Recarregando e Iniciando o Script ############### "
-systemctl daemon-reload
-systemctl enable inicializa.service && systemctl start inicializa.service
-
 echo " ############### Criando Serviço de Inicialização concluido ############### "
 sleep 3s
 
 echo " ############### Baixando a Imagem do cAdvisor ############### "
 docker pull google/cadvisor
 
+echo " ############### Recarregando e Iniciando o Script ############### "
+
+systemctl daemon-reload
+systemctl enable inicializa.service && systemctl start inicializa.service
+
+
 echo " ############### SCRIPT CONCLUIDO COM SUCESSO ############### "
 sleep 10s
+
 
 ## Reiniciando as VMs
 init 6
