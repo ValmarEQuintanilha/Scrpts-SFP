@@ -1,8 +1,8 @@
 #########################################################################################
 ############################# Install and Config SRVWARM01 ############################## 
-echo "################## Editando arquivos ##################"
+echo "################## Editando arquivos de segurança ##################"
 sleep 5
-echo "################## Ativndo ssh negando root loguin ##################"
+echo "################## Ativndo ssh e negando root loguin ##################"
 
 cp -rp /etc/ssh/sshd_config /etc/ssh/sshd_config-orige
 
@@ -12,7 +12,7 @@ systemctl ensable sshd
 systemctl start sshd
 systemctl reload sshd
 
-echo "################## Edição de Arquivos Concluidos ##################"
+echo "################## Edição de Arquivos de segurança Concluidos ##################"
 sleep 5
 
 echo " ############### Instalando pacores basicos ###############"
@@ -31,7 +31,7 @@ sleep 3s
 echo " ############### instalando KeepAlived ############### "
 yum install keepalived -y
 
-echo " ############### renomeando arquivos de configurações ############### "
+echo " ############### fazendo BKP dos  arquivos de configurações ############### "
 mv /etc/keepalived/keepalived.conf /etc/keepalived/keepalived.conf-orige
 
 echo " ############### criando arquivo com as configurações do keepalivd ############### "
@@ -67,7 +67,7 @@ sudo yum check-update
 curl -fsSL https://get.docker.com/ | sh
 systemctl enable docker && systemctl restart docker
 
-echo " ############### Instalando Docker concluido ############### "
+echo " ############### Instalação do Docker concluido ############### "
 sleep 3s
 
 echo " ############### Instalando Docker Compose ############### "
@@ -76,14 +76,14 @@ pip install docker-compose
 yum install docker-compose -y && yum upgrade python*
 yum update -y
 
-echo " ############### Instalando Docker-Compose concluido ############### "
+echo " ############### Instalação do Docker-Compose concluido ############### "
 sleep 3s
 
 echo " ############### Criando diretórios de scripts ############### "
 mkdir /Scripts
 chmod 577 -R /Scripts
 
-echo " ############### Criando diretórios de scripts concluido ############### "
+echo " ############### Criação do diretório de scripts concluido ############### "
 sleep 3s
 
 echo " ############### criando scripta de inicialização ############### "
@@ -100,7 +100,7 @@ docker stack deploy --compose-file=/Scripts/portainer.yml portainer
 
 " > /Scripts/inicializa.sh
 
-echo " ############### criando scripta de inicialização concluido ############### "
+echo " ############### criação do script de inicialização concluido ############### "
 sleep 3s
 
 echo " ############### Criar script Porteiner.yml no servidor principal pra inicialização automatica ############### "
@@ -172,11 +172,10 @@ echo " ############### permissão de Execução nos scrpts ############### "
 chmod +x /Scripts/inicializa.sh
 chmod +x /Scripts/portainer.yml
 
-echo " ############### permissão de Execução no diretório concluido ############### "
+echo " ############### permissões de Execução concluido ############### "
 sleep 3s
 
 echo " ############### Criando Serviço de Inicialização e ativa ele no boot ############### "
-## Conteudo
 
 echo "
 [Unit]
@@ -192,8 +191,7 @@ WantedBy=default.target
 
 chmod +x /etc/systemd/system/inicializa.service
 
-
-echo " ############### Criando Serviço de Inicialização concluido ############### "
+echo " ############### Criação do Serviço de Inicialização concluido ############### "
 sleep 3s
 
 echo " ############### Ativando o SWARM ############### "
@@ -205,6 +203,10 @@ docker network create -d overlay --opt encrypted --subnet 10.255.0.0/16 INGRESS-
 echo " ############### Baixando a Imagem do cAdvisor ############### "
 docker pull google/cadvisor
 
+echo " ############### Baixando as Imagens do Portainer ############### "
+docker pull portainer/agent
+docker pull portainer/portainer
+
 echo " ############### SCRIPT CONCLUIDO COM SUCESSO ############### "
 sleep 10s
 
@@ -212,11 +214,14 @@ echo " ############### Recarregando e Iniciando o Script ############### "
 systemctl daemon-reload
 systemctl enable inicializa.service && systemctl start inicializa.service
 
+echo " ############### Listando toquem worker ############### "
+docker swarm join-token worker
+
 echo " ############### Listando toquem Manager ############### "
 docker swarm join-token manager
 
 echo " ############### Copie o comando para add os servidores ao CLUTSER ############### "
-sleep 100
+sleep 200s
 
-## Reiniciando as VMs
-#init 6
+echo " ############### Reinicialização do sistema ############### "
+init 6
