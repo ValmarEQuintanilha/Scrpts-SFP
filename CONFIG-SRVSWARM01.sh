@@ -143,8 +143,8 @@ services:
       placement:
         constraints: 
           - node.role == manager
-          - node.hostname == SRVSWARM01
-          - node.hostname == SRVSWARM02
+#          - node.hostname == SRVSWARM01
+#          - node.hostname == SRVSWARM02
  
 
 volumes:
