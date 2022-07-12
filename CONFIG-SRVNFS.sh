@@ -43,8 +43,8 @@ echo "
 #LOCKD_TCPPORT=32803
 # UDP port rpc.lockd should listen on.
 #LOCKD_UDPPORT=32769
-RPCNFSDARGS="-N 2 -N 3 -U" //Limita apenas a versão 4
-RPCNFSDCOUNT=64 //N° max de processos
+RPCNFSDARGS="-N 2 -N 3 -U"
+RPCNFSDCOUNT=64
 #NFSD_V4_GRACE=90
 #NFSD_V4_LEASE=90
 RPCMOUNTDOPTS=""
@@ -92,7 +92,7 @@ sleep 5s
 
 echo " ############### COMPARTILHAMENTOS ATIVOS ############### "
 showmount -e 127.0.0.1
-sleep 200s
+sleep 120s
 
 echo " ############### Reinicialização do sistema ############### "
 init 6
