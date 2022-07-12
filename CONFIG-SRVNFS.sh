@@ -33,12 +33,33 @@ echo " ############### Instalando NFS ############### "
 yum install nfs-utils -y
 
 echo " ############### renomeando arquivos de configurações ############### "
-cp -rp /etc/sysconfig/nfs /etc/sysconfig/nfs-orige
+mv /etc/sysconfig/nfs /etc/sysconfig/nfs-orige
 
-echo "Configuração básica do serviço NFS"
+echo "Editando Configurações do serviço NFS"
 
-sed -i 's/RPCNFSDARGS=""/RPCNFSDARGS="-N 2 -N 3 -U" #//Limita apenas a versão 4/g' /etc/sysconfig/nfs
-sed -i 's/#RPCNFSDCOUNT=16/RPCNFSDCOUNT=64 #//N° max de processos/g' /etc/sysconfig/nfs
+echo "
+#LOCKDARG=
+# TCP port rpc.lockd should listen on.
+#LOCKD_TCPPORT=32803
+# UDP port rpc.lockd should listen on.
+#LOCKD_UDPPORT=32769
+RPCNFSDARGS="-N 2 -N 3 -U" //Limita apenas a versão 4
+RPCNFSDCOUNT=64 //N° max de processos
+#NFSD_V4_GRACE=90
+#NFSD_V4_LEASE=90
+RPCMOUNTDOPTS=""
+#MOUNTD_PORT=892
+STATDARG=""
+#STATD_PORT=662
+#STATD_OUTGOING_PORT=2020
+#STATD_HA_CALLOUT="/usr/local/bin/foo"
+SMNOTIFYARGS=""
+RPCIDMAPDARGS=""
+RPCGSSDARGS=""
+GSS_USE_PROXY="yes"
+BLKMAPDARGS=""
+
+" > /etc/sysconfig/nfs
 
 systemctl start nfs-server && systemctl enable nfs-server
 
