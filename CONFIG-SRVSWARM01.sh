@@ -180,13 +180,16 @@ echo " ############### Criando Serviço de Inicialização e ativa ele no boot #
 echo "
 [Unit]
 Description=Script de inicialização personalizado
+After=network.target
 
 [Service]
-ExecStart=/Scripts/inicializa.sh
+Type=simple
+ExecStart=/bin/bash /Scripts/inicializa.sh
+TIMEOUTsTARTsEC=10
 
 [Install]
 WantedBy=default.target
-	
+
 " > /etc/systemd/system/inicializa.service
 
 chmod +x /etc/systemd/system/inicializa.service
