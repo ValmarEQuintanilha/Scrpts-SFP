@@ -118,7 +118,7 @@ After=network.target
 [Service]
 Type=simple
 ExecStart=/bin/bash /Scripts/inicializa.sh
-TIMEOUTsTARTsEC=10
+TimeoutStartSec=10
 
 [Install]
 WantedBy=default.target
