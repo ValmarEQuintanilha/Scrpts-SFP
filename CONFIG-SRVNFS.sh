@@ -71,4 +71,7 @@ sleep 5s
 
 echo " ############### COMPARTILHAMENTOS ATIVOS ############### "
 showmount -e 127.0.0.1
+sleep 200s
 
+echo " ############### Reinicialização do sistema ############### "
+init 6
