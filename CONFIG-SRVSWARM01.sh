@@ -141,8 +141,8 @@ services:
       mode: replicated
       replicas: 2
       placement:
-#        constraints: [node.role == manager]
-        constraints:
+        constraints: 
+          - node.role == manager
           - node.hostname == SRVSWARM01
           - node.hostname == SRVSWARM02
  
