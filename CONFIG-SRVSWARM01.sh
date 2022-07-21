@@ -1,7 +1,8 @@
 #########################################################################################
 ############################# Install and Config SRVWARM01 ############################## 
+
 echo "################## Editando arquivos de segurança ##################"
-sleep 5
+sleep 5s
 echo "################## Ativndo ssh e negando root loguin ##################"
 
 cp -rp /etc/ssh/sshd_config /etc/ssh/sshd_config-orige
@@ -13,20 +14,20 @@ systemctl start sshd
 systemctl reload sshd
 
 echo "################## Edição de Arquivos de segurança Concluidos ##################"
-sleep 5
+sleep 5s
 
 echo " ############### Instalando pacores basicos ###############"
 yum install wget git vim htop curl net-tools nfs-utils traceroute tcpdump qemu-guest-agent rsyslog -y
 yum update -y
 
 echo " ############### Instalando pacores basicos concluido ############### "
-sleep 2s
+sleep 5s
 
 echo " ############### Desabilitando Firewall ############### "
 systemctl stop firewalld && systemctl disable firewalld
 
 echo " ############### Desabilitando Firewall concluido ############### "
-sleep 3s
+sleep 5s
 
 echo " ############### instalando KeepAlived ############### "
 yum install keepalived -y
@@ -43,7 +44,7 @@ vrrp_instance VIP_181.10 {
 	state BACKUP
 	interface enp0s3
 	virtual_router_id 51
-	priority 110
+	priority 120
 	advert_int 1
 	authentication {
 		auth_type PASS
@@ -60,7 +61,7 @@ echo " ############### Ativando serviço do keepalived ############### "
 systemctl enable keepalived && systemctl start keepalived
 
 echo " ############### instalação do KeepAlived concluido ############### "
-sleep 3s
+sleep 5s
 
 echo " ############### Instalando Docker ############### "
 sudo yum check-update
@@ -68,7 +69,7 @@ curl -fsSL https://get.docker.com/ | sh
 systemctl enable docker && systemctl restart docker
 
 echo " ############### Instalação do Docker concluido ############### "
-sleep 3s
+sleep 5s
 
 echo " ############### Instalando Docker Compose ############### "
 yum install epel-release -y && yum update -y && yum install python-pip -y
@@ -77,14 +78,14 @@ yum install docker-compose -y && yum upgrade python*
 yum update -y
 
 echo " ############### Instalação do Docker-Compose concluido ############### "
-sleep 3s
+sleep 5s
 
 echo " ############### Criando diretórios de scripts ############### "
 mkdir /Scripts
 chmod 577 -R /Scripts
 
 echo " ############### Criação do diretório de scripts concluido ############### "
-sleep 3s
+sleep 5s
 
 echo " ############### criando scripta de inicialização ############### "
 echo "
@@ -101,11 +102,9 @@ docker stack deploy --compose-file=/Scripts/portainer.yml portainer
 " > /Scripts/inicializa.sh
 
 echo " ############### criação do script de inicialização concluido ############### "
-sleep 3s
+sleep 5s
 
 echo " ############### Criar script Porteiner.yml no servidor principal pra inicialização automatica ############### "
-#### Conteudo do script portainer.yml
-## Conteudo
 
 echo "
 version: '3.2'
@@ -163,7 +162,7 @@ volumes:
 " > /Scripts/portainer.yml
 
 echo " ############### Criar script Porteiner.yml concluido ############### "
-sleep 3s
+sleep 5s
 
 echo " ############### permissão de Execução no diretório ############### "
 chmod 577 -R /Scripts
@@ -173,7 +172,7 @@ chmod +x /Scripts/inicializa.sh
 chmod +x /Scripts/portainer.yml
 
 echo " ############### permissões de Execução concluido ############### "
-sleep 3s
+sleep 5s
 
 echo " ############### Criando Serviço de Inicialização e ativa ele no boot ############### "
 
@@ -195,7 +194,7 @@ WantedBy=default.target
 chmod +x /etc/systemd/system/inicializa.service
 
 echo " ############### Criação do Serviço de Inicialização concluido ############### "
-sleep 3s
+sleep 5s
 
 echo " ############### Ativando o SWARM ############### "
 docker swarm init --advertise-addr 192.168.181.10
@@ -224,7 +223,7 @@ echo " ############### Listando toquem Manager ############### "
 docker swarm join-token manager
 
 echo " ############### Copie o comando para add os servidores ao CLUTSER ############### "
-sleep 200s
+sleep 100s
 
 echo " ############### Reinicialização do sistema ############### "
 init 6

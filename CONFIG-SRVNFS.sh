@@ -1,7 +1,8 @@
 ###############################################################################################################
 ######################################### Install and Config SRVNFS01 ######################################### 
+
 echo "################## Editando arquivos ##################"
-sleep 5
+sleep 5s
 echo "################## Ativndo ssh negando root loguin ##################"
 
 cp -rp /etc/ssh/sshd_config /etc/ssh/sshd_config-orige
@@ -13,7 +14,7 @@ systemctl start sshd
 systemctl reload sshd
 
 echo "################## Edição de Arquivos Concluidos ##################"
-sleep 5
+sleep 5s
 
 echo " ############### Instalando pacores basicos ############### "
 
@@ -27,7 +28,7 @@ echo " ############### Desabilitando Firewall ############### "
 systemctl stop firewalld && systemctl disable firewalld
 
 echo " ############### Desabilitando Firewall concluido ############### "
-sleep 3s
+sleep 5s
 
 echo " ############### Instalando NFS ############### "
 yum install nfs-utils -y
@@ -92,7 +93,7 @@ sleep 5s
 
 echo " ############### COMPARTILHAMENTOS ATIVOS ############### "
 showmount -e 127.0.0.1
-sleep 120s
+sleep 100s
 
 echo " ############### Reinicialização do sistema ############### "
 init 6
