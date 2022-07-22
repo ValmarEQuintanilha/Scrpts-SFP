@@ -136,7 +136,7 @@ services:
       - portainer_data:/data
 #    networks:
 #      - agent_network
-    deploy:
+    deploy:    deploy:
       mode: replicated
       replicas: 2
       placement:
@@ -145,7 +145,7 @@ services:
 #          - node.hostname == SRVSWARM01
 #          - node.hostname == SRVSWARM02
       restart_policy:
-	    condition: on-failure
+        condition: on-failure
 #	  resources:
 #	    limits:
 #		  cpus: "0.25"
@@ -211,9 +211,9 @@ docker swarm init --advertise-addr 192.168.181.10
 #echo " ############### Criação da rede INGRESS-OVERLAY ############### "
 #docker network create -d overlay --opt encrypted --subnet 10.255.0.0/16 INGRESS-OVERLAY
 
-echo " ############### Recria a rede INGRESS OVERLAY ############### "
-docker network rm ingress
-docker network create -d overlay --opt encrypted --subnet 10.255.0.0/16 ingress
+#echo " ############### Recria a rede INGRESS OVERLAY ############### "
+#docker network rm ingress
+#docker network create -d overlay --opt encrypted --subnet 10.255.0.0/16 ingress
 
 echo " ############### Baixando a Imagem do cAdvisor ############### "
 docker pull google/cadvisor
