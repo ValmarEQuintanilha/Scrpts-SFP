@@ -120,8 +120,8 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /var/lib/docker/volumes:/var/lib/docker/volumes
-#    networks:
-#      - agent_network
+    networks:
+      - agent_network
     deploy:
       mode: global
       placement:
@@ -134,9 +134,9 @@ services:
       - "9000:9000"
     volumes:
       - portainer_data:/data
-#    networks:
-#      - agent_network
-    deploy:    deploy:
+    networks:
+      - agent_network
+    deploy:
       mode: replicated
       replicas: 2
       placement:
@@ -154,7 +154,6 @@ services:
 #         cpus: '0.1'
 #         memory: 32M
  
-
 volumes:
   portainer_data:
     driver: local
@@ -163,10 +162,10 @@ volumes:
       o: nfsvers=4,addr=192.168.181.21,rw
       device: ":/STG/PORTAINER"
 
-#networks:
-#  agent_network:
-#    driver: overlay
-#    attachable: true
+networks:
+  agent_network:
+    driver: overlay
+    attachable: true
 
 " > /Scripts/portainer.yml
 
@@ -208,8 +207,8 @@ sleep 5s
 echo " ############### Ativando o SWARM ############### "
 docker swarm init --advertise-addr 192.168.181.10
 
-#echo " ############### Criação da rede INGRESS-OVERLAY ############### "
-#docker network create -d overlay --opt encrypted --subnet 10.255.0.0/16 INGRESS-OVERLAY
+echo " ############### Criação da rede INGRESS-OVERLAY ############### "
+docker network create -d overlay --opt encrypted --subnet 10.255.0.0/16 INGRESS-OVERLAY
 
 #echo " ############### Recria a rede INGRESS OVERLAY ############### "
 #docker network rm ingress
