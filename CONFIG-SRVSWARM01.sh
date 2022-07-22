@@ -107,7 +107,7 @@ sleep 5s
 echo " ############### Criar script Porteiner.yml no servidor principal pra inicialização automatica ############### "
 
 echo "
-version: '3.2'
+version: '3.3'
 services:
   agent:
     image: portainer/agent
@@ -140,10 +140,19 @@ services:
       mode: replicated
       replicas: 2
       placement:
-        constraints: 
-          - node.role == manager
+        constraints: [node.role == manager]
+#          - node.role == manager
 #          - node.hostname == SRVSWARM01
 #          - node.hostname == SRVSWARM02
+      restart_policy:
+	    condition: on-failure
+#	  resources:
+#	    limits:
+#		  cpus: "0.25"
+#		  memory: 64M
+#       reservations:
+#         cpus: '0.1'
+#         memory: 32M
  
 
 volumes:
@@ -199,8 +208,12 @@ sleep 5s
 echo " ############### Ativando o SWARM ############### "
 docker swarm init --advertise-addr 192.168.181.10
 
-echo " ############### Criação da rede INGRESS-OVERLAY ############### "
-docker network create -d overlay --opt encrypted --subnet 10.255.0.0/16 INGRESS-OVERLAY
+#echo " ############### Criação da rede INGRESS-OVERLAY ############### "
+#docker network create -d overlay --opt encrypted --subnet 10.255.0.0/16 INGRESS-OVERLAY
+
+echo " ############### Recria a rede INGRESS OVERLAY ############### "
+docker network rm ingress
+docker network create -d overlay --opt encrypted --subnet 10.255.0.0/16 ingress
 
 echo " ############### Baixando a Imagem do cAdvisor ############### "
 docker pull google/cadvisor
