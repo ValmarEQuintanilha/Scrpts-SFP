@@ -44,7 +44,7 @@ vrrp_instance VIP_181.10 {
 	state MASTER
 	interface enp0s3
 	virtual_router_id 51
-	priority 120
+	priority 255
 	advert_int 1
 	authentication {
 		auth_type PASS
