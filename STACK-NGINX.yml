@@ -1,0 +1,30 @@
+version: '3.7'
+services:
+  nginx:
+    image: nginx
+    ports:
+    - "80:80"
+    deploy:
+#      mode: replicated
+      replicas: 2
+      placement:
+        constraints: [node.role == manager]
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 64M
+    volumes:
+    # Monta diretóri para execução de arquivos hrml
+    - /var/lib/docker/volumes/portainer_portainer_data/_data/NGINX/html:/usr/share/nginx/html:ro
+    # Monta diretória para gravação de log no NFS
+    - /var/lib/docker/volumes/portainer_portainer_data/_data/NGINX/error_log:/var/log/nginx:rw
+
+volumes:
+  portainer_data:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: nfsvers=4,addr=192.168.181.21,rw
+      device: ":/STG/PORTAINER"
