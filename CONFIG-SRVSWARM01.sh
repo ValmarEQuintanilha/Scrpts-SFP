@@ -41,7 +41,7 @@ echo "
 ! Configuration File for keepalived
 
 vrrp_instance VIP_181.10 {
-	state BACKUP
+	state MASTER
 	interface enp0s3
 	virtual_router_id 51
 	priority 120
