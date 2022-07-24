@@ -45,7 +45,7 @@ echo "
 # UDP port rpc.lockd should listen on.
 #LOCKD_UDPPORT=32769
 RPCNFSDARGS="-N 2 -N 3 -U"
-RPCNFSDCOUNT=64
+RPCNFSDCOUNT=256
 #NFSD_V4_GRACE=90
 #NFSD_V4_LEASE=90
 RPCMOUNTDOPTS=""
@@ -71,8 +71,18 @@ echo " ############### Criando diretórios compartilhados do NFS ###############
 cd\
 
 mkdir /STG
-mkdir /STG/SRVSWARM
 mkdir /STG/PORTAINER
+mkdir /STG/PORTAINER/NGINX
+mkdir /STG/PORTAINER/NGINX/html
+mkdir /STG/PORTAINER/NGINX/error_log
+mkdir /STG/PORTAINER/KAFKA
+mkdir /STG/PORTAINER/KAFKA/id1
+mkdir /STG/PORTAINER/KAFKA/id2
+mkdir /STG/PORTAINER/KAFKA/id3
+mkdir /STG/PORTAINER/ZOOKEEPER
+mkdir /STG/PORTAINER/ZOOKEEPER/id1
+mkdir /STG/PORTAINER/ZOOKEEPER/id2
+mkdir /STG/PORTAINER/ZOOKEEPER/id3
 
 echo " ############### Definindo permissões nos diretórios ############### "
 chmod 777 -R /STG
@@ -80,10 +90,39 @@ chmod 777 -R /STG
 echo " ############### Diretórios Concluidos ############### "
 sleep 5s
 
+echo " ############### Criando Arquivos de configuração do ambiente ############### "
+sleep 2s
+echo " ############### Criando Arquivos do NGINX para teste ############### "
+
+echo "
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste NGINX OK</title>
+</head>
+<body>
+ <h1> Teste NGINX OK </h1>
+</body>
+</html>
+
+" > /STG/PORTAINER/NGINX/html/index.html
+
+echo " ############### permissão de Execução nos Aquivos ############### "
+chmod +x /STG/PORTAINER/NGINX/html/index.html
+
+echo " ############### permissão de Execução no Diretório ############### "
+chmod 577 -R /STG/PORTAINER/NGINX/html
+
+echo " ############### Arquivos de Configuração Criados ############### "
+sleep 5s
+
 echo " ############### Adicionado Compartilhamentos ############### "
 echo "
-/STG/SRVSWARM 192.168.181.0/24(rw,sync,no_root_squash,no_subtree_check)
 /STG/PORTAINER 192.168.181.0/24(rw,sync,no_root_squash,no_subtree_check)
+
 " > /etc/exports
 
 exportfs -a

@@ -112,8 +112,8 @@ services:
   agent:
     image: portainer/agent
     environment:
-      # REQUIRED: Should be equal to the service name prefixed by "tasks." when
-      # deployed inside an overlay network
+      # Obs: Deve ser igual ao nome do serviço prefixado por "tasks". quando
+      # implantado dentro de uma rede de sobreposição "overlay network"
       AGENT_CLUSTER_ADDR: tasks.agent
       # AGENT_PORT: 9001
       # LOG_LEVEL: debug
@@ -141,9 +141,10 @@ services:
       replicas: 2
       placement:
         constraints: [node.role == manager]
-#          - node.role == manager
-#          - node.hostname == SRVSWARM01
-#          - node.hostname == SRVSWARM02
+#        constraints:
+#        - node.role == manager
+#        - node.hostname == SRVSWARM01
+#        - node.hostname == SRVSWARM02
       restart_policy:
         condition: on-failure
 #	  resources:
@@ -209,10 +210,6 @@ docker swarm init --advertise-addr 192.168.181.10
 
 echo " ############### Criação da rede INGRESS-OVERLAY ############### "
 docker network create -d overlay --opt encrypted --subnet 10.255.0.0/16 INGRESS-OVERLAY
-
-#echo " ############### Recria a rede INGRESS OVERLAY ############### "
-#docker network rm ingress
-#docker network create -d overlay --opt encrypted --subnet 10.255.0.0/16 ingress
 
 echo " ############### Baixando a Imagem do cAdvisor ############### "
 docker pull google/cadvisor
