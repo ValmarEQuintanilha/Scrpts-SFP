@@ -236,9 +236,9 @@ echo "
 PidFile=/var/run/zabbix/zabbix_agentd.pid
 LogFile=/var/log/zabbix/zabbix_agentd.log
 LogFileSize=0
-Server=127.0.0.1
-ServerActive=127.0.0.1
-Hostname=Zabbix server
+Server=192.168.181.10
+ServerActive=192.168.181.10
+Hostname=$(hostname)
 Include=/etc/zabbix/zabbix_agentd.d/
 # DebugLevel=3
 ### Option: DebugLevel
@@ -252,6 +252,8 @@ Include=/etc/zabbix/zabbix_agentd.d/
 
 
 " > /etc/zabbix/zabbix_agentd.conf
+
+systemctl enable zabbix-agent && systemctl start zabbix-agent
 
 echo " ############### Configuração do Agente do Zabbix Concluido ############### "
 

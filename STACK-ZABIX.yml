@@ -4,6 +4,7 @@ version: '3.7'
 services:
   mysql:
     image: mysql:5.7
+    container_name: Mysql     
     ports:
       - '3306:3306'
     volumes:
@@ -17,6 +18,7 @@ services:
 #Zabix SERVER
   zabbix-server:
     image: zabbix/zabbix-server-mysql:ubuntu-5.0.1
+    container_name: Zabbix    
     links:
       - mysql
     restart: always
@@ -67,6 +69,7 @@ services:
 #Agent ZABIX 
   zabbix-agent:
     image: zabbix/zabbix-agent2:alpine-5.0.1
+    container_name: Zabbix-Agent       
     user: root
     links:
       - zabbix-server
@@ -82,7 +85,7 @@ services:
       - '10050:10050'
     environment:
       - ZBX_HOSTNAME=Zabbix server
-      - ZBX_SERVER_HOST=172.18.0.1
+      - ZBX_SERVER_HOST=192.168.181.10
 
 #Configurações Gerais
 volumes:
