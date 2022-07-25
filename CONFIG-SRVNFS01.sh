@@ -39,6 +39,7 @@ firewall-cmd --permanent --add-port=2049/tcp
 firewall-cmd --permanent --add-port=2049/udp
 firewall-cmd --add-port=10051/tcp --permanent
 firewall-cmd --add-port=10050/tcp --permanent
+firewall-cmd --add-port=9000/tcp --permanent
 firewall-cmd --reload
 
 echo " ############### Regras de Firewall concluido ############### "

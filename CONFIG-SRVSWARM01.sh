@@ -32,14 +32,14 @@ sleep 5s
 #echo " ############### Desabilitando Firewall ############### "
 #systemctl stop firewalld && systemctl disable firewalld
 
-echo " ############### Liberando Portas no Firewall ############### "
-firewall-cmd --permanent --add-service=rpc-bind
-firewall-cmd --permanent --add-service=mountd
-firewall-cmd --permanent --add-port=2049/tcp
-firewall-cmd --permanent --add-port=2049/udp
-firewall-cmd --add-port=10051/tcp --permanent
-firewall-cmd --add-port=10050/tcp --permanent
-firewall-cmd --reload
+#echo " ############### Liberando Portas no Firewall ############### "
+#firewall-cmd --permanent --add-service=rpc-bind
+#firewall-cmd --permanent --add-service=mountd
+#firewall-cmd --permanent --add-port=2049/tcp
+#firewall-cmd --permanent --add-port=2049/udp
+#firewall-cmd --add-port=10051/tcp --permanent
+#firewall-cmd --add-port=10050/tcp --permanent
+#firewall-cmd --reload
 
 echo " ############### Desabilitando Firewall concluido ############### "
 sleep 5s
@@ -136,7 +136,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - /var/lib/docker/volumes:/var/lib/docker/volumes
     networks:
-      - agent_network
+      - network_overlay
     deploy:
       mode: global
       placement:
@@ -150,7 +150,7 @@ services:
     volumes:
       - portainer_data:/data
     networks:
-      - ingress
+      - network_overlay
     deploy:
       mode: replicated
       replicas: 2
@@ -180,17 +180,15 @@ volumes:
       device: ":/STG/PORTAINER"
 
 networks:
-  agent_network:
-    driver: overlay
-    attachable: true
-  network-zabbix:
-    driver: bridge
-    attachable: true
-  ingress:
+  network_overlay:
     driver: overlay
     ipam:
       config:
       - subnet: 10.255.0.0/16
+    attachable: true
+  network-zabbix:
+    driver: bridge
+    attachable: true
 
 
 " > /Scripts/portainer.yml
