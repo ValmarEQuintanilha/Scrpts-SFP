@@ -141,7 +141,7 @@ services:
     volumes:
       - portainer_data:/data
     networks:
-      - agent_network
+      - ingress
     deploy:
       mode: replicated
       replicas: 2
@@ -177,6 +177,12 @@ networks:
   network-zabbix:
     driver: bridge
     attachable: true
+  ingress:
+    driver: overlay
+    ipam:
+      config:
+      - subnet: 10.255.0.0/16
+
 
 " > /Scripts/portainer.yml
 
