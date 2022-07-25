@@ -21,6 +21,7 @@ services:
     # Monta diretória para gravação de log no NFS
     - /var/lib/docker/volumes/portainer_portainer_data/_data/NGINX/error_log:/var/log/nginx:rw
 
+#Configurações Gerais
 volumes:
   portainer_data:
     driver: local
@@ -28,3 +29,11 @@ volumes:
       type: nfs
       o: nfsvers=4,addr=192.168.181.21,rw
       device: ":/STG/PORTAINER"
+
+networks:
+  agent_network:
+    driver: overlay
+    attachable: true
+  network-zabbix:
+    driver: bridge
+    attachable: true

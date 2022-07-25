@@ -24,10 +24,17 @@ yum update -y
 echo " ############### Instalando pacores basicos Concluidos ############### "
 sleep 5s
 
-echo " ############### Desabilitando Firewall ############### "
-systemctl stop firewalld && systemctl disable firewalld
+#echo " ############### Desabilitando Firewall ############### "
+#systemctl stop firewalld && systemctl disable firewalld
 
-echo " ############### Desabilitando Firewall concluido ############### "
+echo " ############### Liberando Portas no Firewall ############### "
+firewall-cmd --permanent --add-service=rpc-bind
+firewall-cmd --permanent --add-service=mountd
+firewall-cmd --permanent --add-port=2049/tcp
+firewall-cmd --permanent --add-port=2049/udp
+firewall-cmd --reload
+
+echo " ############### Regras de Firewall concluido ############### "
 sleep 5s
 
 echo " ############### Instalando NFS ############### "

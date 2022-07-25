@@ -155,6 +155,7 @@ services:
 #         cpus: '0.1'
 #         memory: 32M
  
+#Configurações Gerais
 volumes:
   portainer_data:
     driver: local
@@ -166,6 +167,9 @@ volumes:
 networks:
   agent_network:
     driver: overlay
+    attachable: true
+  network-zabbix:
+    driver: bridge
     attachable: true
 
 " > /Scripts/portainer.yml

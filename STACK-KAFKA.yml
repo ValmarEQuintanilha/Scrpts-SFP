@@ -1,4 +1,4 @@
-version: '3'
+version: '3.7'
 services:
   zookeeperr01:
     image: confluentinc/cp-zookeeper:latest
@@ -117,6 +117,7 @@ services:
           memory: 64M
       replicas: 2          
 
+#Configurações Gerais
 volumes:
   portainer_data:
     driver: local
@@ -124,3 +125,11 @@ volumes:
       type: nfs
       o: nfsvers=4,addr=192.168.181.21,rw
       device: ":/STG/PORTAINER"
+
+networks:
+  agent_network:
+    driver: overlay
+    attachable: true
+  network-zabbix:
+    driver: bridge
+    attachable: true
