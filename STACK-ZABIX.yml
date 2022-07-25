@@ -1,0 +1,102 @@
+version: '3.7'
+
+#Banco de Dados
+services:
+  mysql:
+    image: mysql:5.7
+    ports:
+      - '3306:3306'
+    volumes:
+      - '/var/lib/docker/volumes/portainer_portainer_data/_data/ZABIX/mysql:/var/lib/data'
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
+      - MYSQL_DATABASE=zabbix
+      - MYSQL_USER=zabbix
+      - MYSQL_PASSWORD=123456
+
+#Zabix SERVER
+  zabbix-server:
+    image: zabbix/zabbix-server-mysql:ubuntu-5.0.1
+    links:
+      - mysql
+    restart: always
+    ports:
+      - '10051:10051'
+    volumes:
+      - '/var/lib/docker/volumes/portainer_portainer_data/_data/ZABIX/alertscripts/:/usr/lib/zabbix/alertscripts'
+    environment:
+      - DB_SERVER_HOST=mysql
+      - MYSQL_DATABASE=zabbix
+      - MYSQL_USER=zabbix
+      - MYSQL_PASSWORD=123456
+    depends_on:
+      - mysql
+
+  zabbix-frontend:
+    image: zabbix/zabbix-web-apache-mysql:ubuntu-5.0.1
+    links:
+      - mysql
+    restart: always
+    ports:
+      - '8180:8080'
+      - '443:8443'
+    environment:
+      - DB_SERVER_HOST=mysql
+      - MYSQL_DATABASE=zabbix
+      - MYSQL_USER=zabbix
+      - MYSQL_PASSWORD=123456
+      - PHP_TZ=America/Sao_Paulo
+    depends_on:
+      - mysql
+
+# GRAFANA 
+  grafana:
+    image: grafana/grafana
+    links:
+      - mysql
+      - zabbix-server
+    restart: always
+    ports:
+      - '3000:3000'
+    environment: 
+      - GF_INSTALL_PLUGINS=alexanderzobnin-zabbix-app
+    depends_on:
+      - mysql
+      - zabbix-server
+
+#Agent ZABIX 
+  zabbix-agent:
+    image: zabbix/zabbix-agent2:alpine-5.0.1
+    user: root
+    links:
+      - zabbix-server
+    restart: always
+    privileged: true
+    deploy:
+      mode: global
+      placement:
+        constraints: [node.platform.os == linux]
+    volumes:
+      - /var/run:/var/run
+    ports:
+      - '10050:10050'
+    environment:
+      - ZBX_HOSTNAME=Zabbix server
+      - ZBX_SERVER_HOST=172.18.0.1
+
+#Configurações Gerais
+volumes:
+  portainer_data:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: nfsvers=4,addr=192.168.181.21,rw
+      device: ":/STG/PORTAINER"
+
+networks:
+  agent_network:
+    driver: overlay
+    attachable: true
+  network-zabbix:
+    driver: bridge
+    attachable: true

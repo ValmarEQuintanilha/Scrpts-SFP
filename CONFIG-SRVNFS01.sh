@@ -83,13 +83,10 @@ mkdir /STG/PORTAINER/NGINX
 mkdir /STG/PORTAINER/NGINX/html
 mkdir /STG/PORTAINER/NGINX/error_log
 mkdir /STG/PORTAINER/KAFKA
-mkdir /STG/PORTAINER/KAFKA/id1
-mkdir /STG/PORTAINER/KAFKA/id2
-mkdir /STG/PORTAINER/KAFKA/id3
-mkdir /STG/PORTAINER/ZOOKEEPER
-mkdir /STG/PORTAINER/ZOOKEEPER/id1
-mkdir /STG/PORTAINER/ZOOKEEPER/id2
-mkdir /STG/PORTAINER/ZOOKEEPER/id3
+mkdir /STG/PORTAINER/ZABIX/
+mkdir /STG/PORTAINER/ZABIX/mysql
+mkdir /STG/PORTAINER/ZABIX/alertscripts
+
 
 echo " ############### Definindo permissões nos diretórios ############### "
 chmod 777 -R /STG
