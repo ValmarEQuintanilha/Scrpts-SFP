@@ -26,7 +26,7 @@ sleep 5s
 yum install wget git vim curl net-tools nfs-utils traceroute tcpdump qemu-guest-agent rsyslog zabbix-agent -y
 yum update -y
 
-echo " ############### Instalando pacores basicos Concluidos ############### "
+echo " ############### Instalando pacotes basicos Concluidos ############### "
 sleep 5s
 
 #echo " ############### Desabilitando Firewall ############### "

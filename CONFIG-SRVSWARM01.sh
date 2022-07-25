@@ -26,11 +26,20 @@ sleep 5s
 yum install wget git vim htop curl net-tools nfs-utils traceroute tcpdump qemu-guest-agent rsyslog zabbix-agent -y
 yum update -y
 
-echo " ############### Instalando pacores basicos concluido ############### "
+echo " ############### Instalando pacotes basicos Concluidos ############### "
 sleep 5s
 
-echo " ############### Desabilitando Firewall ############### "
-systemctl stop firewalld && systemctl disable firewalld
+#echo " ############### Desabilitando Firewall ############### "
+#systemctl stop firewalld && systemctl disable firewalld
+
+echo " ############### Liberando Portas no Firewall ############### "
+firewall-cmd --permanent --add-service=rpc-bind
+firewall-cmd --permanent --add-service=mountd
+firewall-cmd --permanent --add-port=2049/tcp
+firewall-cmd --permanent --add-port=2049/udp
+firewall-cmd --add-port=10051/tcp --permanent
+firewall-cmd --add-port=10050/tcp --permanent
+firewall-cmd --reload
 
 echo " ############### Desabilitando Firewall concluido ############### "
 sleep 5s
