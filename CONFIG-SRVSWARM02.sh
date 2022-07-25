@@ -13,11 +13,17 @@ systemctl ensable sshd
 systemctl start sshd
 systemctl reload sshd
 
-echo "################## Edição de Arquivos de segurança Concluidos ##################"
+echo "################## Edição de Arquivos Concluidos ##################"
 sleep 5s
 
-echo " ############### Instalando pacores basicos ###############"
-yum install wget git vim curl net-tools nfs-utils traceroute tcpdump qemu-guest-agent rsyslog -y
+echo "################## Adicionando repositórios ##################"
+
+rpm -Uvh http://repo.zabbix.com/zabbix/3.0/rhel/7/x86_64/zabbix-release-3.0-1.el7.noarch.rpm
+
+echo " ############### Instalando pacores basicos ############### "
+sleep 5s
+
+yum install wget git vim curl net-tools nfs-utils traceroute tcpdump qemu-guest-agent rsyslog zabbix-agent -y
 yum update -y
 
 echo " ############### Instalando pacores basicos concluido ############### "
@@ -136,6 +142,33 @@ docker pull google/cadvisor
 echo " ############### Baixando as Imagens do Portainer ############### "
 docker pull portainer/agent
 docker pull portainer/portainer
+
+echo " ############### Configurando Agente Zabbix ############### "
+sleep 3s
+mv /etc/zabbix/zabbix_agentd.conf /etc/zabbix/zabbix_agentd.conf-orige
+
+echo "
+PidFile=/var/run/zabbix/zabbix_agentd.pid
+LogFile=/var/log/zabbix/zabbix_agentd.log
+LogFileSize=0
+Server=127.0.0.1
+ServerActive=127.0.0.1
+Hostname=Zabbix server
+Include=/etc/zabbix/zabbix_agentd.d/
+# DebugLevel=3
+### Option: DebugLevel
+#	Specifies debug level:
+#	0 - basic information about starting and stopping of Zabbix processes
+#	1 - critical information
+#	2 - error information
+#	3 - warnings
+#	4 - for debugging (produces lots of information)
+#	5 - extended debugging (produces even more information)
+
+
+" > /etc/zabbix/zabbix_agentd.conf
+
+echo " ############### Configuração do Agente do Zabbix Concluido ############### "
 
 echo " ############### SCRIPT CONCLUIDO COM SUCESSO ############### "
 sleep 10s

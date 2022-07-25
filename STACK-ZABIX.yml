@@ -7,7 +7,7 @@ services:
     ports:
       - '3306:3306'
     volumes:
-      - '/var/lib/docker/volumes/portainer_portainer_data/_data/ZABIX/mysql:/var/lib/data'
+      - '/var/lib/docker/volumes/portainer_portainer_data/_data/ZABIX/mysql:/var/lib/mysql'
     environment:
       - MYSQL_ROOT_PASSWORD=123456
       - MYSQL_DATABASE=zabbix
