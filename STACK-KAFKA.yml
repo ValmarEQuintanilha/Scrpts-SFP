@@ -145,9 +145,6 @@ volumes:
 networks:
   network_overlay:
     driver: overlay
-    ipam:
-      config:
-      - subnet: 10.255.0.0/16
     attachable: true
   network-zabbix:
     driver: bridge

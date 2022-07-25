@@ -7,17 +7,17 @@ services:
     - "80:80"
     deploy:
 #      mode: replicated
-      replicas: 2
-    networks:
-      - network_overlay      
+      replicas: 2  
       placement:
         constraints: [node.role == manager]
       restart_policy:
-        condition: on-failure
+        condition: on-failure         
       resources:
         limits:
           cpus: "0.25"
           memory: 64M
+    networks:
+      - network_overlay   
     volumes:
     # Monta diretóri para execução de arquivos hrml
     - /var/lib/docker/volumes/portainer_portainer_data/_data/NGINX/html:/usr/share/nginx/html:ro
@@ -36,10 +36,7 @@ volumes:
 networks:
   network_overlay:
     driver: overlay
-    ipam:
-      config:
-      - subnet: 10.255.0.0/16
     attachable: true
   network-zabbix:
     driver: bridge
-    attachable: truee
+    attachable: true
