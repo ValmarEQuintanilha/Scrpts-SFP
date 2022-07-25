@@ -11,6 +11,8 @@ services:
       ZOOKEEPER_SYNC_LIMIT: 2
       ZOOKEEPER_SERVERS: localhost:22888:23888;localhost:32888:33888;localhost:42888:43888
     network_mode: host
+    networks:
+      - network_overlay
     extra_hosts:
       - "moby:127.0.0.1"
     deploy:
@@ -51,6 +53,8 @@ services:
       ZOOKEEPER_SYNC_LIMIT: 2
       ZOOKEEPER_SERVERS: localhost:22888:23888;localhost:32888:33888;localhost:42888:43888
     network_mode: host
+    networks:
+      - network_overlay
     extra_hosts:
       - "moby:127.0.0.1"
     deploy:
@@ -64,6 +68,8 @@ services:
     image: confluentinc/cp-kafka:latest
     container_name: kafka01    
     network_mode: host
+    networks:
+      - network_overlay
     depends_on:
       - zookeeperr01
       - zookeeperr02
@@ -85,6 +91,8 @@ services:
     image: confluentinc/cp-kafka:latest
     container_name: kafka02    
     network_mode: host
+    networks:
+      - network_overlay
     depends_on:
       - zookeeperr01
       - zookeeperr02
@@ -106,6 +114,8 @@ services:
     image: confluentinc/cp-kafka:latest
     container_name: kafka03    
     network_mode: host
+    networks:
+      - network_overlay
     depends_on:
       - zookeeperr01
       - zookeeperr02
@@ -133,8 +143,11 @@ volumes:
       device: ":/STG/PORTAINER"
 
 networks:
-  agent_network:
+  network_overlay:
     driver: overlay
+    ipam:
+      config:
+      - subnet: 10.255.0.0/16
     attachable: true
   network-zabbix:
     driver: bridge

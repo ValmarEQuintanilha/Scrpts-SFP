@@ -8,6 +8,8 @@ services:
     deploy:
 #      mode: replicated
       replicas: 2
+    networks:
+      - network_overlay      
       placement:
         constraints: [node.role == manager]
       restart_policy:
@@ -32,9 +34,12 @@ volumes:
       device: ":/STG/PORTAINER"
 
 networks:
-  agent_network:
+  network_overlay:
     driver: overlay
+    ipam:
+      config:
+      - subnet: 10.255.0.0/16
     attachable: true
   network-zabbix:
     driver: bridge
-    attachable: true
+    attachable: truee

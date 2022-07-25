@@ -7,6 +7,8 @@ services:
     container_name: Mysql     
     ports:
       - '3306:3306'
+    networks:
+      - network_overlay
     volumes:
       - '/var/lib/docker/volumes/portainer_portainer_data/_data/ZABIX/mysql:/var/lib/mysql'
     environment:
@@ -24,6 +26,8 @@ services:
     restart: always
     ports:
       - '10051:10051'
+    networks:
+      - network_overlay
     volumes:
       - '/var/lib/docker/volumes/portainer_portainer_data/_data/ZABIX/alertscripts/:/usr/lib/zabbix/alertscripts'
     environment:
@@ -42,6 +46,8 @@ services:
     ports:
       - '8180:8080'
       - '443:8443'
+    networks:
+      - network_overlay
     environment:
       - DB_SERVER_HOST=mysql
       - MYSQL_DATABASE=zabbix
@@ -60,6 +66,8 @@ services:
     restart: always
     ports:
       - '3000:3000'
+    networks:
+      - network_overlay      
     environment: 
       - GF_INSTALL_PLUGINS=alexanderzobnin-zabbix-app
     depends_on:
@@ -73,6 +81,8 @@ services:
     user: root
     links:
       - zabbix-server
+    networks:
+      - network_overlay      
     restart: always
     privileged: true
     deploy:
@@ -97,8 +107,11 @@ volumes:
       device: ":/STG/PORTAINER"
 
 networks:
-  agent_network:
+  network_overlay:
     driver: overlay
+    ipam:
+      config:
+      - subnet: 10.255.0.0/16
     attachable: true
   network-zabbix:
     driver: bridge
