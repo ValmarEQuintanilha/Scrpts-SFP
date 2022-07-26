@@ -7,7 +7,7 @@ services:
     ports:
     - "80:80"
     deploy:
-#      mode: replicated
+      mode: replicated
       replicas: 2  
       placement:
         constraints: [node.role == manager]

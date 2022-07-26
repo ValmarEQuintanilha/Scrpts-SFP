@@ -182,21 +182,7 @@ volumes:
 networks:
   network_bridge:
     driver: bridge
-  network_overlay:
-    driver: overlay
     attachable: true
-  network-zabbix:
-    driver: bridge
-    attachable: true
-  network_nginx:
-    driver: bridge
-    attachable: true   
-  network_kafka:
-    driver: bridge
-    attachable: true  
-  default:
-    driver: bridge
-
 
 " > /Scripts/portainer.yml
 
