@@ -3,6 +3,7 @@ services:
   nginx:
     image: nginx
     container_name: nginx
+    network_mode: host
     ports:
     - "80:80"
     deploy:
@@ -11,13 +12,11 @@ services:
       placement:
         constraints: [node.role == manager]
       restart_policy:
-        condition: on-failure         
+        condition: on-failure           
       resources:
         limits:
           cpus: "0.25"
           memory: 64M
-    networks:
-      - network_overlay   
     volumes:
     # Monta diretóri para execução de arquivos hrml
     - /var/lib/docker/volumes/portainer_portainer_data/_data/NGINX/html:/usr/share/nginx/html:ro
@@ -34,9 +33,6 @@ volumes:
       device: ":/STG/PORTAINER"
 
 networks:
-  network_overlay:
-    driver: overlay
-    attachable: true
-  network-zabbix:
+  network_nginx:
     driver: bridge
-    attachable: true
+    attachable: true 

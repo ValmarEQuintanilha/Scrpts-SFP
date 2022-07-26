@@ -11,20 +11,20 @@ services:
       ZOOKEEPER_SYNC_LIMIT: 2
       ZOOKEEPER_SERVERS: localhost:22888:23888;localhost:32888:33888;localhost:42888:43888
     network_mode: host
-    networks:
-      - network_overlay
+#    networks:
+#      - network-kafka
     extra_hosts:
       - "moby:127.0.0.1"
     deploy:
       resources:
         limits:
           cpus: "0.1"
-          memory: 64M
-      replicas: 2
+          memory: 25M
+      replicas: 1
 
   zookeeperr02:
     image: confluentinc/cp-zookeeper:latest
-    container_name: zookeeperr02    
+    container_name: zookeeperr02
     environment:
       ZOOKEEPER_SERVER_ID: 2
       ZOOKEEPER_CLIENT_PORT: 32181
@@ -33,18 +33,20 @@ services:
       ZOOKEEPER_SYNC_LIMIT: 2
       ZOOKEEPER_SERVERS: localhost:22888:23888;localhost:32888:33888;localhost:42888:43888
     network_mode: host
+#    networks:
+#      - network-kafka
     extra_hosts:
       - "moby:127.0.0.1"
     deploy:
       resources:
         limits:
           cpus: "0.1"
-          memory: 64M
-      replicas: 2          
+          memory: 25M
+      replicas: 1
 
   zookeeperr03:
     image: confluentinc/cp-zookeeper:latest
-    container_name: zookeeperr03    
+    container_name: zookeeperr03
     environment:
       ZOOKEEPER_SERVER_ID: 3
       ZOOKEEPER_CLIENT_PORT: 42181
@@ -53,23 +55,23 @@ services:
       ZOOKEEPER_SYNC_LIMIT: 2
       ZOOKEEPER_SERVERS: localhost:22888:23888;localhost:32888:33888;localhost:42888:43888
     network_mode: host
-    networks:
-      - network_overlay
+#    networks:
+#      - network-kafka
     extra_hosts:
       - "moby:127.0.0.1"
     deploy:
       resources:
         limits:
           cpus: "0.1"
-          memory: 64M
-      replicas: 2          
+          memory: 25M
+      replicas: 1
 
   kafka01:
     image: confluentinc/cp-kafka:latest
-    container_name: kafka01    
+    container_name: kafka01
     network_mode: host
-    networks:
-      - network_overlay
+#    networks:
+#      - network-kafka
     depends_on:
       - zookeeperr01
       - zookeeperr02
@@ -84,15 +86,15 @@ services:
       resources:
         limits:
           cpus: "0.1"
-          memory: 64M
-      replicas: 2          
+          memory: 25M
+      replicas: 1
 
   kafka02:
     image: confluentinc/cp-kafka:latest
-    container_name: kafka02    
+    container_name: kafka02
     network_mode: host
-    networks:
-      - network_overlay
+#    networks:
+#      - network-kafka
     depends_on:
       - zookeeperr01
       - zookeeperr02
@@ -107,15 +109,15 @@ services:
       resources:
         limits:
           cpus: "0.1"
-          memory: 64M
-      replicas: 2          
+          memory: 25M
+      replicas: 1
 
   kafka03:
     image: confluentinc/cp-kafka:latest
-    container_name: kafka03    
+    container_name: kafka03
     network_mode: host
-    networks:
-      - network_overlay
+#    networks:
+#      - network-kafka
     depends_on:
       - zookeeperr01
       - zookeeperr02
@@ -130,8 +132,8 @@ services:
       resources:
         limits:
           cpus: "0.1"
-          memory: 64M
-      replicas: 2          
+          memory: 25M
+      replicas: 1
 
 #Configurações Gerais
 volumes:
@@ -143,9 +145,6 @@ volumes:
       device: ":/STG/PORTAINER"
 
 networks:
-  network_overlay:
-    driver: overlay
-    attachable: true
-  network-zabbix:
+  network-kafka:
     driver: bridge
-    attachable: true
+    attachable: true 

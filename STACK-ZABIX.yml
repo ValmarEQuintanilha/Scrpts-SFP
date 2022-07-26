@@ -2,32 +2,38 @@ version: '3.7'
 
 #Banco de Dados
 services:
-  mysql:
+  mysql: 
     image: mysql:5.7
-    container_name: Mysql     
+    networks:
+      - network-zabbix  
     ports:
-      - '3306:3306'
-    network_mode: host
+      - '3306:3306' 
     volumes:
-      - '/var/lib/docker/volumes/portainer_portainer_data/_data/ZABIX/mysql:/var/lib/mysql'
+      - '/var/lib/docker/volumes/portainer_portainer_data/_data/ZABIX/Mysql:/var/lib/mysql'
     environment:
       - MYSQL_ROOT_PASSWORD=123456
       - MYSQL_DATABASE=zabbix
       - MYSQL_USER=zabbix
-      - MYSQL_PASSWORD=123456
-
+      - MYSQL_PASSWORD=123456    
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 64M
+      replicas: 1
+    
 #Zabix SERVER
   zabbix-server:
     image: zabbix/zabbix-server-mysql:ubuntu-5.0.1
-    container_name: Zabbix    
+    networks:
+      - network-zabbix     
     links:
       - mysql
     restart: always
     ports:
       - '10051:10051'
-    network_mode: host
     volumes:
-      - '/var/lib/docker/volumes/portainer_portainer_data/_data/ZABIX/alertscripts/:/usr/lib/zabbix/alertscripts'
+      - '/var/lib/docker/volumes/portainer_portainer_data/_data/ZABIX/Alertscripts/:/usr/lib/zabbix/alertscripts'
     environment:
       - DB_SERVER_HOST=mysql
       - MYSQL_DATABASE=zabbix
@@ -35,16 +41,23 @@ services:
       - MYSQL_PASSWORD=123456
     depends_on:
       - mysql
-
-  zabbix-frontend:
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 64M
+      replicas: 1      
+        
+  zabbix-frontend: 
     image: zabbix/zabbix-web-apache-mysql:ubuntu-5.0.1
+    networks:
+      - network-zabbix     
     links:
       - mysql
     restart: always
     ports:
       - '8180:8080'
-      - '443:8443'
-    network_mode: host
+      - '443:8443' 
     environment:
       - DB_SERVER_HOST=mysql
       - MYSQL_DATABASE=zabbix
@@ -53,37 +66,46 @@ services:
       - PHP_TZ=America/Sao_Paulo
     depends_on:
       - mysql
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 64M
+      replicas: 1     
 
 # GRAFANA 
-  grafana:
+  grafana:  
     image: grafana/grafana
+    networks:
+      - network-zabbix    
     links:
       - mysql
       - zabbix-server
     restart: always
     ports:
-      - '3000:3000'
-    network_mode: host  
-    environment: 
+      - '3000:3000' 
+    environment:
       - GF_INSTALL_PLUGINS=alexanderzobnin-zabbix-app
     depends_on:
       - mysql
       - zabbix-server
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 64M
+      replicas: 1     
 
 #Agent ZABIX 
-  zabbix-agent:
+  zabbix-agent: 
     image: zabbix/zabbix-agent2:alpine-5.0.1
-    container_name: Zabbix-Agent       
+    networks:
+      - network-zabbix      
     user: root
     links:
       - zabbix-server
-    network_mode: host    
     restart: always
-    privileged: true
-    deploy:
-      mode: global
-      placement:
-        constraints: [node.platform.os == linux]
+    privileged: true      
     volumes:
       - /var/run:/var/run
     ports:
@@ -91,6 +113,14 @@ services:
     environment:
       - ZBX_HOSTNAME=Zabbix server
       - ZBX_SERVER_HOST=192.168.181.10
+    deploy:
+      mode: global
+      placement:
+        constraints: [node.platform.os == linux]
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 64M
 
 #Configurações Gerais
 volumes:
@@ -102,9 +132,6 @@ volumes:
       device: ":/STG/PORTAINER"
 
 networks:
-  network_overlay:
-    driver: overlay
-    attachable: true
   network-zabbix:
     driver: bridge
     attachable: true

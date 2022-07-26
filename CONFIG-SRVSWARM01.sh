@@ -23,14 +23,14 @@ rpm -Uvh http://repo.zabbix.com/zabbix/3.0/rhel/7/x86_64/zabbix-release-3.0-1.el
 echo " ############### Instalando pacores basicos ############### "
 sleep 5s
 
-yum install wget git vim htop curl net-tools nfs-utils traceroute tcpdump qemu-guest-agent rsyslog zabbix-agent -y
+yum install wget git vim htop curl net-tools nfs-utils traceroute tcpdump qemu-guest-agent rsyslog zabbix-agent telnet -y
 yum update -y
 
 echo " ############### Instalando pacotes basicos Concluidos ############### "
 sleep 5s
 
 #echo " ############### Desabilitando Firewall ############### "
-#systemctl stop firewalld && systemctl disable firewalld
+systemctl stop firewalld && systemctl disable firewalld
 
 #echo " ############### Liberando Portas no Firewall ############### "
 #firewall-cmd --permanent --add-service=rpc-bind
@@ -136,7 +136,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - /var/lib/docker/volumes:/var/lib/docker/volumes
     networks:
-      - network_overlay
+      - network_bridge
     deploy:
       mode: global
       placement:
@@ -150,7 +150,7 @@ services:
     volumes:
       - portainer_data:/data
     networks:
-      - network_overlay
+      - network_bridge
     deploy:
       mode: replicated
       replicas: 2
@@ -180,15 +180,22 @@ volumes:
       device: ":/STG/PORTAINER"
 
 networks:
+  network_bridge:
+    driver: bridge
   network_overlay:
     driver: overlay
-    ipam:
-      config:
-      - subnet: 10.255.0.0/16
     attachable: true
   network-zabbix:
     driver: bridge
     attachable: true
+  network_nginx:
+    driver: bridge
+    attachable: true   
+  network_kafka:
+    driver: bridge
+    attachable: true  
+  default:
+    driver: bridge
 
 
 " > /Scripts/portainer.yml
@@ -253,7 +260,7 @@ Server=192.168.181.10
 ServerActive=192.168.181.10
 Hostname=$(hostname)
 Include=/etc/zabbix/zabbix_agentd.d/
-# DebugLevel=3
+DebugLevel=3
 ### Option: DebugLevel
 #	Specifies debug level:
 #	0 - basic information about starting and stopping of Zabbix processes

@@ -23,7 +23,7 @@ rpm -Uvh http://repo.zabbix.com/zabbix/3.0/rhel/7/x86_64/zabbix-release-3.0-1.el
 echo " ############### Instalando pacores basicos ############### "
 sleep 5s
 
-yum install wget git vim curl net-tools nfs-utils traceroute tcpdump qemu-guest-agent rsyslog zabbix-agent -y
+yum install wget git vim curl net-tools nfs-utils traceroute tcpdump qemu-guest-agent rsyslog zabbix-agent telnet -y
 yum update -y
 
 echo " ############### Instalando pacotes basicos Concluidos ############### "
@@ -39,7 +39,6 @@ firewall-cmd --permanent --add-port=2049/tcp
 firewall-cmd --permanent --add-port=2049/udp
 firewall-cmd --add-port=10051/tcp --permanent
 firewall-cmd --add-port=10050/tcp --permanent
-firewall-cmd --add-port=9000/tcp --permanent
 firewall-cmd --reload
 
 echo " ############### Regras de Firewall concluido ############### "
@@ -92,8 +91,9 @@ mkdir /STG/PORTAINER/NGINX/html
 mkdir /STG/PORTAINER/NGINX/error_log
 mkdir /STG/PORTAINER/KAFKA
 mkdir /STG/PORTAINER/ZABIX/
-mkdir /STG/PORTAINER/ZABIX/mysql
-mkdir /STG/PORTAINER/ZABIX/alertscripts
+mkdir /STG/PORTAINER/ZABIX/Mysql
+mkdir /STG/PORTAINER/ZABIX/Alertscripts
+mkdir /STG/PORTAINER/ZABIX/Server
 
 
 echo " ############### Definindo permissões nos diretórios ############### "
@@ -154,7 +154,7 @@ Server=192.168.181.10
 ServerActive=192.168.181.10
 Hostname=$(hostname)
 Include=/etc/zabbix/zabbix_agentd.d/
-# DebugLevel=3
+DebugLevel=3
 ### Option: DebugLevel
 #	Specifies debug level:
 #	0 - basic information about starting and stopping of Zabbix processes

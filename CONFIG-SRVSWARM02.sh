@@ -23,23 +23,23 @@ rpm -Uvh http://repo.zabbix.com/zabbix/3.0/rhel/7/x86_64/zabbix-release-3.0-1.el
 echo " ############### Instalando pacores basicos ############### "
 sleep 5s
 
-yum install wget git vim curl net-tools nfs-utils traceroute tcpdump qemu-guest-agent rsyslog zabbix-agent -y
+yum install wget git vim curl net-tools nfs-utils traceroute tcpdump qemu-guest-agent rsyslog zabbix-agent telnet -y
 yum update -y
 
 echo " ############### Instalando pacotes basicos Concluidos ############### "
 sleep 5s
 
 #echo " ############### Desabilitando Firewall ############### "
-#systemctl stop firewalld && systemctl disable firewalld
+systemctl stop firewalld && systemctl disable firewalld
 
-echo " ############### Liberando Portas no Firewall ############### "
-firewall-cmd --permanent --add-service=rpc-bind
-firewall-cmd --permanent --add-service=mountd
-firewall-cmd --permanent --add-port=2049/tcp
-firewall-cmd --permanent --add-port=2049/udp
-firewall-cmd --add-port=10051/tcp --permanent
-firewall-cmd --add-port=10050/tcp --permanent
-firewall-cmd --reload
+#echo " ############### Liberando Portas no Firewall ############### "
+#firewall-cmd --permanent --add-service=rpc-bind
+#firewall-cmd --permanent --add-service=mountd
+#firewall-cmd --permanent --add-port=2049/tcp
+#firewall-cmd --permanent --add-port=2049/udp
+#firewall-cmd --add-port=10051/tcp --permanent
+#firewall-cmd --add-port=10050/tcp --permanent
+#firewall-cmd --reload
 
 echo " ############### Desabilitando Firewall concluido ############### "
 sleep 5s
@@ -164,7 +164,7 @@ Server=192.168.181.10
 ServerActive=192.168.181.10
 Hostname=$(hostname)
 Include=/etc/zabbix/zabbix_agentd.d/
-# DebugLevel=3
+DebugLevel=3
 ### Option: DebugLevel
 #	Specifies debug level:
 #	0 - basic information about starting and stopping of Zabbix processes
