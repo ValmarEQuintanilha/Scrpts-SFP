@@ -135,8 +135,8 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /var/lib/docker/volumes:/var/lib/docker/volumes
-    networks:
-      - network_bridge
+#    networks:
+#      - network_bridge
     deploy:
       mode: global
       placement:
@@ -149,8 +149,8 @@ services:
       - "9000:9000"
     volumes:
       - portainer_data:/data
-    networks:
-      - network_bridge
+#    networks:
+#      - network_bridge
     deploy:
       mode: replicated
       replicas: 2
@@ -211,7 +211,7 @@ Type=simple
 ExecStart=/bin/bash /Scripts/inicializa.sh
 TimeoutStartSec=10
 
-[Install]
+S[Install]
 WantedBy=default.target
 
 " > /etc/systemd/system/inicializa.service
