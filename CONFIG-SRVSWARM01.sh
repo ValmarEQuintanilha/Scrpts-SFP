@@ -122,7 +122,7 @@ sleep 5s
 echo " ############### Criar script Porteiner.yml no servidor principal pra inicialização automatica ############### "
 
 echo "
-version: '3.3'
+version: '3.7'
 services:
   agent:
     image: portainer/agent
