@@ -135,8 +135,6 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /var/lib/docker/volumes:/var/lib/docker/volumes
-#    networks:
-#      - network_bridge
     deploy:
       mode: global
       placement:
@@ -149,8 +147,6 @@ services:
       - "9000:9000"
     volumes:
       - portainer_data:/data
-#    networks:
-#      - network_bridge
     deploy:
       mode: replicated
       replicas: 2
